@@ -15,6 +15,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .hc-ptop-4 { padding-top: 32px; }
 .hc-ptop-5 { padding-top: 40px; }
 
+.hc-mright-1 { margin-right: 8px; }
+.hc-mright-2 { margin-right: 16px; }
+.hc-mright-3 { margin-right: 24px; }
+.hc-mright-4 { margin-right: 32px; }
+.hc-mright-5 { margin-right: 40px; }
+
 .hc-w-5 { width: 5%; }
 .hc-w-10 { width: 10%; }
 .hc-w-15 { width: 15%; }
