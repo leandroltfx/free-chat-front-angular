@@ -23,10 +23,7 @@ export class LoginProxyService {
       loginRequestContract
     ).pipe(
       map(loginResponseContract => loginResponseContract),
-      catchError(loginResponseError => throwError(() => {
-        console.log(loginResponseError);
-        return loginResponseError;
-      })),
+      catchError(loginResponseError => throwError(() => loginResponseError)),
     );
   }
 }
