@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { LoginFacadeService } from './acl/facade/login-facade.service';
+import { MessageService } from '../../core/services/message/message.service';
 
 @Component({
   selector: 'hc-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
+    private readonly messageService: MessageService,
     private readonly loginFacadeService: LoginFacadeService,
   ) { }
 
@@ -38,8 +40,8 @@ export class LoginComponent implements OnInit {
         password,
       ).subscribe(
         {
-          next: loginResponseDto => console.log(loginResponseDto),
-          error: loginResponseError => console.log(loginResponseError) 
+          next: loginResponseDto => this.messageService.showMessage(loginResponseDto.message, 'success'),
+          error: loginResponseError => this.messageService.showMessage(loginResponseError.message, 'error'),
         }
       );
     }

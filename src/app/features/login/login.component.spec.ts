@@ -13,15 +13,18 @@ import { of } from 'rxjs';
 import { LoginComponent } from './login.component';
 import { LoginFacadeService } from './acl/facade/login-facade.service';
 import { LoginResponseDto } from '../../shared/dto/login/login-response-dto';
+import { MessageService } from '../../core/services/message/message.service';
 
 describe('LoginComponent', () => {
   let loginComponent: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let loginFacadeServiceSpy: jasmine.SpyObj<LoginFacadeService>;
+  let messageServiceSpy: jasmine.SpyObj<MessageService>;
   
   beforeEach(() => {
 
     loginFacadeServiceSpy = jasmine.createSpyObj('LoginFacadeService', ['login']);
+    messageServiceSpy = jasmine.createSpyObj('MessageService', ['showMessage']);
 
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
@@ -36,7 +39,8 @@ describe('LoginComponent', () => {
         MatFormFieldModule,
       ],
       providers: [
-        { provide: LoginFacadeService, useValue: loginFacadeServiceSpy }
+        { provide: LoginFacadeService, useValue: loginFacadeServiceSpy },
+        { provide: MessageService, useValue: messageServiceSpy },
       ]
     });
     fixture = TestBed.createComponent(LoginComponent);
@@ -57,8 +61,6 @@ describe('LoginComponent', () => {
     );
     loginFacadeServiceSpy.login.and.returnValue(of(loginResponseDto));
 
-    const logSpy = spyOn(console, 'log');
-
     loginComponent.loginForm = loginComponent.buildLoginForm();
 
     loginComponent.loginForm.controls['email'].setValue('email@email.com');
@@ -67,12 +69,10 @@ describe('LoginComponent', () => {
     loginComponent.login();
 
     expect(loginFacadeServiceSpy.login).toHaveBeenCalledWith('email@email.com', 'password');
-    expect(logSpy).toHaveBeenCalledWith(loginResponseDto);
+    expect(messageServiceSpy.showMessage).toHaveBeenCalledWith('Login efetuado com sucesso!', 'success');
   });
 
   it('não deve fazer login se não preencher o email', () => {
-
-    const logSpy = spyOn(console, 'log');
 
     loginComponent.loginForm = loginComponent.buildLoginForm();
 
@@ -82,12 +82,10 @@ describe('LoginComponent', () => {
     loginComponent.login();
 
     expect(loginFacadeServiceSpy.login).not.toHaveBeenCalled();
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(messageServiceSpy.showMessage).not.toHaveBeenCalled();
   });
 
   it('não deve fazer login se não preencher a senha', () => {
-
-    const logSpy = spyOn(console, 'log');
 
     loginComponent.loginForm = loginComponent.buildLoginForm();
 
@@ -97,12 +95,10 @@ describe('LoginComponent', () => {
     loginComponent.login();
 
     expect(loginFacadeServiceSpy.login).not.toHaveBeenCalled();
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(messageServiceSpy.showMessage).not.toHaveBeenCalled();
   });
 
   it('não deve fazer login se não preencher o formulário', () => {
-
-    const logSpy = spyOn(console, 'log');
 
     loginComponent.loginForm = loginComponent.buildLoginForm();
 
@@ -112,6 +108,6 @@ describe('LoginComponent', () => {
     loginComponent.login();
 
     expect(loginFacadeServiceSpy.login).not.toHaveBeenCalled();
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(messageServiceSpy.showMessage).not.toHaveBeenCalled();
   });
 });
