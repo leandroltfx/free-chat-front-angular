@@ -3,7 +3,15 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* Correção para o Angular 16 */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    background-color: transparent !important;
+}
+
 .hc-center { margin: 0 auto; }
+
+.hc-success-message { color: #ffffff; background-color: #008000; text-align: center; }
+.hc-error-message { color: #ffffff; background-color: #ff0000; text-align: center; }
 
 .hc-txt-center { text-align: center; }
 .hc-txt-left { text-align: left; }
