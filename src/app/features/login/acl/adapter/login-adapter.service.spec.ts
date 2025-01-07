@@ -3,14 +3,18 @@ import { TestBed } from '@angular/core/testing';
 import { LoginAdapterService } from './login-adapter.service';
 
 describe('LoginAdapterService', () => {
-  let service: LoginAdapterService;
+  let loginAdapterService: LoginAdapterService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(LoginAdapterService);
+    TestBed.configureTestingModule({
+      providers: [
+        LoginAdapterService,
+      ]
+    });
+    loginAdapterService = TestBed.inject(LoginAdapterService);
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(loginAdapterService).toBeTruthy();
   });
 });

@@ -8,13 +8,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+import { of } from 'rxjs';
+
 import { LoginComponent } from './login.component';
+import { LoginFacadeService } from './acl/facade/login-facade.service';
+import { LoginResponseDto } from '../../shared/dto/login/login-response-dto';
 
 describe('LoginComponent', () => {
-  let component: LoginComponent;
+  let loginComponent: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-
+  let loginFacadeServiceSpy: jasmine.SpyObj<LoginFacadeService>;
+  
   beforeEach(() => {
+
+    loginFacadeServiceSpy = jasmine.createSpyObj('LoginFacadeService', ['login']);
+
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [
@@ -26,42 +34,54 @@ describe('LoginComponent', () => {
         MatInputModule,
         MatButtonModule,
         MatFormFieldModule,
+      ],
+      providers: [
+        { provide: LoginFacadeService, useValue: loginFacadeServiceSpy }
       ]
     });
     fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
+    loginComponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(loginComponent).toBeTruthy();
   });
 
   it('deve fazer login se o formulário estiver preenchido', () => {
 
+    const loginResponseDto: LoginResponseDto = new LoginResponseDto(
+      'Login efetuado com sucesso!',
+      'admin@mail.com',
+      'admin'
+    );
+    loginFacadeServiceSpy.login.and.returnValue(of(loginResponseDto));
+
     const logSpy = spyOn(console, 'log');
 
-    component.loginForm = component.buildLoginForm();
+    loginComponent.loginForm = loginComponent.buildLoginForm();
 
-    component.loginForm.controls['email'].setValue('email@email.com');
-    component.loginForm.controls['password'].setValue('password');
+    loginComponent.loginForm.controls['email'].setValue('email@email.com');
+    loginComponent.loginForm.controls['password'].setValue('password');
 
-    component.login();
+    loginComponent.login();
 
-    expect(logSpy).toHaveBeenCalledWith('login');
+    expect(loginFacadeServiceSpy.login).toHaveBeenCalledWith('email@email.com', 'password');
+    expect(logSpy).toHaveBeenCalledWith(loginResponseDto);
   });
 
   it('não deve fazer login se não preencher o email', () => {
 
     const logSpy = spyOn(console, 'log');
 
-    component.loginForm = component.buildLoginForm();
+    loginComponent.loginForm = loginComponent.buildLoginForm();
 
-    component.loginForm.controls['email'].setValue('');
-    component.loginForm.controls['password'].setValue('password');
+    loginComponent.loginForm.controls['email'].setValue('');
+    loginComponent.loginForm.controls['password'].setValue('password');
 
-    component.login();
+    loginComponent.login();
 
+    expect(loginFacadeServiceSpy.login).not.toHaveBeenCalled();
     expect(logSpy).not.toHaveBeenCalled();
   });
 
@@ -69,13 +89,14 @@ describe('LoginComponent', () => {
 
     const logSpy = spyOn(console, 'log');
 
-    component.loginForm = component.buildLoginForm();
+    loginComponent.loginForm = loginComponent.buildLoginForm();
 
-    component.loginForm.controls['email'].setValue('email@email.com');
-    component.loginForm.controls['password'].setValue('');
+    loginComponent.loginForm.controls['email'].setValue('email@email.com');
+    loginComponent.loginForm.controls['password'].setValue('');
 
-    component.login();
+    loginComponent.login();
 
+    expect(loginFacadeServiceSpy.login).not.toHaveBeenCalled();
     expect(logSpy).not.toHaveBeenCalled();
   });
 
@@ -83,13 +104,14 @@ describe('LoginComponent', () => {
 
     const logSpy = spyOn(console, 'log');
 
-    component.loginForm = component.buildLoginForm();
+    loginComponent.loginForm = loginComponent.buildLoginForm();
 
-    component.loginForm.controls['email'].setValue('');
-    component.loginForm.controls['password'].setValue('');
+    loginComponent.loginForm.controls['email'].setValue('');
+    loginComponent.loginForm.controls['password'].setValue('');
 
-    component.login();
+    loginComponent.login();
 
+    expect(loginFacadeServiceSpy.login).not.toHaveBeenCalled();
     expect(logSpy).not.toHaveBeenCalled();
   });
 });
