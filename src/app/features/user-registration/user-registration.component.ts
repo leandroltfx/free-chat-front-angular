@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { MessageService } from '../../core/services/message/message.service';
+import { UserRegistrationFacadeService } from './acl/facade/user-registration-facade.service';
+import { UserRegistrationResponseDto } from '../../shared/dto/user-registration/user-registration-response-dto';
+import { UserRegistrationErrorResponseDto } from '../../shared/dto/user-registration/error/user-registration-error-response-dto';
+
 @Component({
   selector: 'hc-user-registration',
   templateUrl: './user-registration.component.html',
@@ -22,6 +27,8 @@ export class UserRegistrationComponent {
 
   constructor(
     private readonly formBuilder: FormBuilder,
+    private readonly messageService: MessageService,
+    private readonly userRegistrationFacadeService: UserRegistrationFacadeService,
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +59,19 @@ export class UserRegistrationComponent {
 
   public registerUser(): void {
     if (this.userRegistrationForm.valid) {
-      console.log('register user');
+      const username = this.userRegistrationForm.controls['username'].value;
+      const email = this.userRegistrationForm.controls['email'].value;
+      const password = this.userRegistrationForm.controls['password'].value;
+      this.userRegistrationFacadeService.registerUser(
+        username,
+        email,
+        password,
+      ).subscribe(
+        {
+          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => this.messageService.showMessage(userRegistrationResponseDto.message, 'success'),
+          error: (userRegistrationErrorResponseDto: UserRegistrationErrorResponseDto) => this.messageService.showMessage(userRegistrationErrorResponseDto.message, 'error'),
+        }
+      );
     }
   }
 
