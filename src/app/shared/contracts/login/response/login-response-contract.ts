@@ -1,4 +1,4 @@
-import { LoggedUserModel } from "src/app/shared/models/logged-user/logged-user-model";
+import { LoggedUserModel } from "../../../../shared/models/logged-user/logged-user-model";
 
 export class LoginResponseContract {
 

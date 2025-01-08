@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { LoginFacadeService } from './acl/facade/login-facade.service';
 import { MessageService } from '../../core/services/message/message.service';
+import { LoginResponseDto } from '../../shared/dto/login/login-response-dto';
+import { LoginErrorResponseDto } from '../../shared/dto/login/error/login-error-response-dto';
 
 @Component({
   selector: 'hc-login',
@@ -40,8 +42,8 @@ export class LoginComponent implements OnInit {
         password,
       ).subscribe(
         {
-          next: loginResponseDto => this.messageService.showMessage(loginResponseDto.message, 'success'),
-          error: loginResponseError => this.messageService.showMessage(loginResponseError.message, 'error'),
+          next: (loginResponseDto: LoginResponseDto) => this.messageService.showMessage(loginResponseDto.message, 'success'),
+          error: (loginErrorResponseDto: LoginErrorResponseDto) => this.messageService.showMessage(loginErrorResponseDto.message, 'error'),
         }
       );
     }

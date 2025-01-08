@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { of, throwError } from 'rxjs';
 
 import { LoginFacadeService } from './login-facade.service';
 import { LoginProxyService } from '../proxy/login-proxy.service';
 import { LoginAdapterService } from '../adapter/login-adapter.service';
-import { of, throwError } from 'rxjs';
-import { LoginResponseContract } from 'src/app/shared/contracts/login/response/login-response-contract';
-import { HttpErrorResponse } from '@angular/common/http';
+import { LoginResponseContract } from '../../../../shared/contracts/login/response/login-response-contract';
 
 describe('LoginFacadeService', () => {
   let loginFacadeService: LoginFacadeService;
@@ -15,7 +16,7 @@ describe('LoginFacadeService', () => {
   beforeEach(() => {
 
     loginProxyServiceSpy = jasmine.createSpyObj('LoginProxyService', ['login']);
-    loginAdapterServiceSpy = jasmine.createSpyObj('LoginAdapterService', ['toLoginRequestContract', 'loginResponseContractToLoginResponseDto']);
+    loginAdapterServiceSpy = jasmine.createSpyObj('LoginAdapterService', ['toLoginRequestContract', 'toLoginResponseDto', 'toLoginErrorResponseDto']);
 
     TestBed.configureTestingModule({
       providers: [
@@ -47,7 +48,7 @@ describe('LoginFacadeService', () => {
         next: () => {
           expect(loginProxyServiceSpy.login).toHaveBeenCalled();
           expect(loginAdapterServiceSpy.toLoginRequestContract).toHaveBeenCalled();
-          expect(loginAdapterServiceSpy.loginResponseContractToLoginResponseDto).toHaveBeenCalled();
+          expect(loginAdapterServiceSpy.toLoginResponseDto).toHaveBeenCalled();
         }
       }
     );
@@ -67,7 +68,7 @@ describe('LoginFacadeService', () => {
         error: () => {
           expect(loginProxyServiceSpy.login).toHaveBeenCalled();
           expect(loginAdapterServiceSpy.toLoginRequestContract).toHaveBeenCalled();
-          expect(loginAdapterServiceSpy.loginResponseContractToLoginResponseDto).toHaveBeenCalled();
+          expect(loginAdapterServiceSpy.toLoginErrorResponseDto).toHaveBeenCalled();
         }
       }
     );

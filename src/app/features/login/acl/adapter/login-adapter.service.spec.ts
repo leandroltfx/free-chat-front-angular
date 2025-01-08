@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { LoginAdapterService } from './login-adapter.service';
-import { LoginRequestContract } from 'src/app/shared/contracts/login/request/login-request-contract';
-import { LoginResponseContract } from 'src/app/shared/contracts/login/response/login-response-contract';
-import { LoginResponseDto } from 'src/app/shared/dto/login/login-response-dto';
-import { HttpErrorResponseDto } from 'src/app/shared/dto/error/http-error-response-dto';
-import { HttpErrorResponse } from '@angular/common/http';
+import { LoginResponseDto } from '../../../../shared/dto/login/login-response-dto';
+import { LoginErrorResponseDto } from '../../../../shared/dto/login/error/login-error-response-dto';
+import { LoginRequestContract } from '../../../../shared/contracts/login/request/login-request-contract';
+import { LoginResponseContract } from '../../../../shared/contracts/login/response/login-response-contract';
 
 describe('LoginAdapterService', () => {
   let loginAdapterService: LoginAdapterService;
@@ -45,9 +45,21 @@ describe('LoginAdapterService', () => {
       }
     };
 
-    const loginResponseDto = loginAdapterService.loginResponseContractToLoginResponseDto(loginResponseContract);
+    const loginResponseDto = <LoginResponseDto>loginAdapterService.toLoginResponseDto(loginResponseContract);
 
     expect(loginResponseDto instanceof LoginResponseDto).toBeTrue();
     expect(loginResponseDto.message).toBe('Login efetuado com sucesso!');
+    expect(loginResponseDto.user.email).toBe('admin@email.com');
+    expect(loginResponseDto.user.username).toBe('admin');
+  });
+
+  it('deve montar o DTO a partir da resposta de erro do login', () => {
+
+    const loginResponseError: HttpErrorResponse = new HttpErrorResponse({ error: { message: 'Ocorreu um erro no login, tente novamente mais tarde.' } });
+
+    const loginResponseDto = <LoginErrorResponseDto>loginAdapterService.toLoginErrorResponseDto(loginResponseError);
+
+    expect(loginResponseDto instanceof LoginErrorResponseDto).toBeTrue();
+    expect(loginResponseDto.message).toBe('Ocorreu um erro no login, tente novamente mais tarde.');
   });
 });

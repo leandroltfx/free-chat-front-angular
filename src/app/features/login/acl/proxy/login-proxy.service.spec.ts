@@ -3,7 +3,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { LoginProxyService } from './login-proxy.service';
-import { HttpErrorResponseDto } from '../../../../shared/dto/error/http-error-response-dto';
 import { LoginRequestContract } from '../../../../shared/contracts/login/request/login-request-contract';
 import { LoginResponseContract } from '../../../../shared/contracts/login/response/login-response-contract';
 
@@ -41,7 +40,7 @@ describe('LoginProxyService', () => {
 
   it('deve retornar uma resposta com sucesso quando a requisição for bem-sucedida', () => {
 
-    loginProxyService.login(loginRequest).subscribe((response: LoginResponseContract | HttpErrorResponseDto) => {
+    loginProxyService.login(loginRequest).subscribe((response: LoginResponseContract) => {
       expect(response).toEqual(loginResponse);
     });
 

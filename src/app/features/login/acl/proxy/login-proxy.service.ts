@@ -17,13 +17,13 @@ export class LoginProxyService {
 
   login(
     loginRequestContract: LoginRequestContract,
-  ): Observable<LoginResponseContract | HttpErrorResponse> {
-    return this.httpClient.post<LoginResponseContract | any>(
+  ): Observable<LoginResponseContract> {
+    return this.httpClient.post<LoginResponseContract>(
       `${this.basePathBackMockoon}/login`,
       loginRequestContract
     ).pipe(
       map(loginResponseContract => loginResponseContract),
-      catchError(loginResponseError => throwError(() => loginResponseError)),
+      catchError(httpErrorResponse => throwError(() => httpErrorResponse)),
     );
   }
 }

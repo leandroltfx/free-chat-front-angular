@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { catchError, map, Observable, throwError } from 'rxjs';
 
 import { LoginProxyService } from '../proxy/login-proxy.service';
 import { LoginAdapterService } from '../adapter/login-adapter.service';
 import { LoginResponseDto } from '../../../../shared/dto/login/login-response-dto';
-import { HttpErrorResponseDto } from '../../../../shared/dto/error/http-error-response-dto';
+import { LoginResponseContract } from '../../../../shared/contracts/login/response/login-response-contract';
 
 @Injectable()
 export class LoginFacadeService {
@@ -18,12 +19,12 @@ export class LoginFacadeService {
   login(
     email: string,
     password: string,
-  ): Observable<LoginResponseDto | HttpErrorResponseDto> {
+  ): Observable<LoginResponseDto> {
     return this.loginProxyService.login(
       this.loginAdapterService.toLoginRequestContract(email, password)
     ).pipe(
-      map(loginResponseContract => this.loginAdapterService.loginResponseContractToLoginResponseDto(loginResponseContract)),
-      catchError(loginResponseError => throwError(() => this.loginAdapterService.loginResponseContractToLoginResponseDto(loginResponseError))),
+      map((loginResponseContract: LoginResponseContract) => this.loginAdapterService.toLoginResponseDto(loginResponseContract)),
+      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => this.loginAdapterService.toLoginErrorResponseDto(httpErrorResponse))),
     );
   }
 }
