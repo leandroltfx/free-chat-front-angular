@@ -22,8 +22,8 @@ export class LoginFacadeService {
     return this.loginProxyService.login(
       this.loginAdapterService.toLoginRequestContract(email, password)
     ).pipe(
-      map(loginResponseContract => this.loginAdapterService.loginResponseContractToLoginResponseDto(loginResponseContract)),
-      catchError(loginResponseError => throwError(() => this.loginAdapterService.loginResponseContractToLoginResponseDto(loginResponseError))),
+      map(loginResponseContract => this.loginAdapterService.loginResponseContractToDto(loginResponseContract)),
+      catchError(loginResponseError => throwError(() => this.loginAdapterService.loginResponseContractToDto(loginResponseError))),
     );
   }
 }

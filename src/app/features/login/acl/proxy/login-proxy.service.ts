@@ -18,7 +18,7 @@ export class LoginProxyService {
   login(
     loginRequestContract: LoginRequestContract,
   ): Observable<LoginResponseContract | HttpErrorResponse> {
-    return this.httpClient.post<LoginResponseContract | any>(
+    return this.httpClient.post<LoginResponseContract | HttpErrorResponse>(
       `${this.basePathBackMockoon}/login`,
       loginRequestContract
     ).pipe(

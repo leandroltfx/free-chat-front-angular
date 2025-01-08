@@ -15,7 +15,7 @@ export class LoginAdapterService {
     return new LoginRequestContract(email, password);
   }
 
-  loginResponseContractToLoginResponseDto(
+  loginResponseContractToDto(
     loginResponseContract: LoginResponseContract | HttpErrorResponse,
   ): LoginResponseDto | HttpErrorResponseDto {
     if (loginResponseContract instanceof HttpErrorResponse) {

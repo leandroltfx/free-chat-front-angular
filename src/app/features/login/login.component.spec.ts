@@ -8,12 +8,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 import { LoginFacadeService } from './acl/facade/login-facade.service';
 import { LoginResponseDto } from '../../shared/dto/login/login-response-dto';
 import { MessageService } from '../../core/services/message/message.service';
+import { HttpErrorResponseDto } from 'src/app/shared/dto/error/http-error-response-dto';
 
 describe('LoginComponent', () => {
   let loginComponent: LoginComponent;
@@ -70,6 +71,24 @@ describe('LoginComponent', () => {
 
     expect(loginFacadeServiceSpy.login).toHaveBeenCalledWith('email@email.com', 'password');
     expect(messageServiceSpy.showMessage).toHaveBeenCalledWith('Login efetuado com sucesso!', 'success');
+  });
+
+  it('deve disparar mensagem de erro se der erro no login', () => {
+
+    const loginResponseError: HttpErrorResponseDto = new HttpErrorResponseDto(
+      'Ocorreu um erro no login, tente novamente mais tarde.',
+    );
+    loginFacadeServiceSpy.login.and.returnValue(throwError(() => loginResponseError));
+
+    loginComponent.loginForm = loginComponent.buildLoginForm();
+
+    loginComponent.loginForm.controls['email'].setValue('email@email.com');
+    loginComponent.loginForm.controls['password'].setValue('password');
+
+    loginComponent.login();
+
+    expect(loginFacadeServiceSpy.login).toHaveBeenCalledWith('email@email.com', 'password');
+    expect(messageServiceSpy.showMessage).toHaveBeenCalledWith('Ocorreu um erro no login, tente novamente mais tarde.', 'error');
   });
 
   it('não deve fazer login se não preencher o email', () => {

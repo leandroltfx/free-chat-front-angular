@@ -15,7 +15,7 @@ describe('LoginFacadeService', () => {
   beforeEach(() => {
 
     loginProxyServiceSpy = jasmine.createSpyObj('LoginProxyService', ['login']);
-    loginAdapterServiceSpy = jasmine.createSpyObj('LoginAdapterService', ['toLoginRequestContract', 'loginResponseContractToLoginResponseDto']);
+    loginAdapterServiceSpy = jasmine.createSpyObj('LoginAdapterService', ['toLoginRequestContract', 'loginResponseContractToDto']);
 
     TestBed.configureTestingModule({
       providers: [
@@ -47,7 +47,7 @@ describe('LoginFacadeService', () => {
         next: () => {
           expect(loginProxyServiceSpy.login).toHaveBeenCalled();
           expect(loginAdapterServiceSpy.toLoginRequestContract).toHaveBeenCalled();
-          expect(loginAdapterServiceSpy.loginResponseContractToLoginResponseDto).toHaveBeenCalled();
+          expect(loginAdapterServiceSpy.loginResponseContractToDto).toHaveBeenCalled();
         }
       }
     );
@@ -67,7 +67,7 @@ describe('LoginFacadeService', () => {
         error: () => {
           expect(loginProxyServiceSpy.login).toHaveBeenCalled();
           expect(loginAdapterServiceSpy.toLoginRequestContract).toHaveBeenCalled();
-          expect(loginAdapterServiceSpy.loginResponseContractToLoginResponseDto).toHaveBeenCalled();
+          expect(loginAdapterServiceSpy.loginResponseContractToDto).toHaveBeenCalled();
         }
       }
     );
