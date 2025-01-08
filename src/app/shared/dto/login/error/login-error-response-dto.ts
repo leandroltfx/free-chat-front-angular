@@ -1,4 +1,4 @@
-export class HttpErrorResponseDto {
+export class LoginErrorResponseDto {
 
     message!: string;
 

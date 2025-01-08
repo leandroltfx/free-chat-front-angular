@@ -14,7 +14,7 @@ import { LoginComponent } from './login.component';
 import { LoginFacadeService } from './acl/facade/login-facade.service';
 import { LoginResponseDto } from '../../shared/dto/login/login-response-dto';
 import { MessageService } from '../../core/services/message/message.service';
-import { HttpErrorResponseDto } from 'src/app/shared/dto/error/http-error-response-dto';
+import { LoginErrorResponseDto } from '../../shared/dto/login/error/login-error-response-dto';
 
 describe('LoginComponent', () => {
   let loginComponent: LoginComponent;
@@ -75,7 +75,7 @@ describe('LoginComponent', () => {
 
   it('deve disparar mensagem de erro se der erro no login', () => {
 
-    const loginResponseError: HttpErrorResponseDto = new HttpErrorResponseDto(
+    const loginResponseError: LoginErrorResponseDto = new LoginErrorResponseDto(
       'Ocorreu um erro no login, tente novamente mais tarde.',
     );
     loginFacadeServiceSpy.login.and.returnValue(throwError(() => loginResponseError));

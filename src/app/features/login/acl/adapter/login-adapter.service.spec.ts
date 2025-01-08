@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { LoginAdapterService } from './login-adapter.service';
 import { LoginResponseDto } from '../../../../shared/dto/login/login-response-dto';
-import { HttpErrorResponseDto } from '../../../../shared/dto/error/http-error-response-dto';
+import { LoginErrorResponseDto } from '../../../../shared/dto/login/error/login-error-response-dto';
 import { LoginRequestContract } from '../../../../shared/contracts/login/request/login-request-contract';
 import { LoginResponseContract } from '../../../../shared/contracts/login/response/login-response-contract';
 
@@ -45,7 +45,7 @@ describe('LoginAdapterService', () => {
       }
     };
 
-    const loginResponseDto = <LoginResponseDto>loginAdapterService.loginResponseContractToDto(loginResponseContract);
+    const loginResponseDto = <LoginResponseDto>loginAdapterService.toLoginResponseDto(loginResponseContract);
 
     expect(loginResponseDto instanceof LoginResponseDto).toBeTrue();
     expect(loginResponseDto.message).toBe('Login efetuado com sucesso!');
@@ -57,9 +57,9 @@ describe('LoginAdapterService', () => {
 
     const loginResponseError: HttpErrorResponse = new HttpErrorResponse({ error: { message: 'Ocorreu um erro no login, tente novamente mais tarde.' } });
 
-    const loginResponseDto = <HttpErrorResponseDto>loginAdapterService.loginResponseContractToDto(loginResponseError);
+    const loginResponseDto = <LoginErrorResponseDto>loginAdapterService.toLoginErrorResponseDto(loginResponseError);
 
-    expect(loginResponseDto instanceof HttpErrorResponseDto).toBeTrue();
+    expect(loginResponseDto instanceof LoginErrorResponseDto).toBeTrue();
     expect(loginResponseDto.message).toBe('Ocorreu um erro no login, tente novamente mais tarde.');
   });
 });
