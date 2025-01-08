@@ -1,4 +1,5 @@
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -31,6 +32,7 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       imports: [
         ReactiveFormsModule,
+        RouterTestingModule,
         BrowserAnimationsModule,
 
         MatCardModule,
@@ -62,7 +64,7 @@ describe('LoginComponent', () => {
     );
     loginFacadeServiceSpy.login.and.returnValue(of(loginResponseDto));
 
-    loginComponent.loginForm = loginComponent.buildLoginForm();
+    loginComponent.loginForm = loginComponent['_buildLoginForm']();
 
     loginComponent.loginForm.controls['email'].setValue('email@email.com');
     loginComponent.loginForm.controls['password'].setValue('password');
@@ -80,7 +82,7 @@ describe('LoginComponent', () => {
     );
     loginFacadeServiceSpy.login.and.returnValue(throwError(() => loginResponseError));
 
-    loginComponent.loginForm = loginComponent.buildLoginForm();
+    loginComponent.loginForm = loginComponent['_buildLoginForm']();
 
     loginComponent.loginForm.controls['email'].setValue('email@email.com');
     loginComponent.loginForm.controls['password'].setValue('password');
@@ -93,7 +95,7 @@ describe('LoginComponent', () => {
 
   it('não deve fazer login se não preencher o email', () => {
 
-    loginComponent.loginForm = loginComponent.buildLoginForm();
+    loginComponent.loginForm = loginComponent['_buildLoginForm']();
 
     loginComponent.loginForm.controls['email'].setValue('');
     loginComponent.loginForm.controls['password'].setValue('password');
@@ -106,7 +108,7 @@ describe('LoginComponent', () => {
 
   it('não deve fazer login se não preencher a senha', () => {
 
-    loginComponent.loginForm = loginComponent.buildLoginForm();
+    loginComponent.loginForm = loginComponent['_buildLoginForm']();
 
     loginComponent.loginForm.controls['email'].setValue('email@email.com');
     loginComponent.loginForm.controls['password'].setValue('');
@@ -119,7 +121,7 @@ describe('LoginComponent', () => {
 
   it('não deve fazer login se não preencher o formulário', () => {
 
-    loginComponent.loginForm = loginComponent.buildLoginForm();
+    loginComponent.loginForm = loginComponent['_buildLoginForm']();
 
     loginComponent.loginForm.controls['email'].setValue('');
     loginComponent.loginForm.controls['password'].setValue('');
