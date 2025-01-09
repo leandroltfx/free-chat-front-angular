@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { UserRegistrationResponseDto } from '../../../../shared/dto/user-registration/user-registration-response-dto';
+import { UserRegistrationErrorResponseDto } from '../../../../shared/dto/user-registration/error/user-registration-error-response-dto';
 import { UserRegistrationRequestContract } from '../../../../shared/contracts/user-registration/request/user-registration-request-contract';
 import { UserRegistrationResponseContract } from '../../../../shared/contracts/user-registration/response/user-registration-response-contract';
-import { HttpErrorResponse } from '@angular/common/http';
-import { UserRegistrationErrorResponseDto } from 'src/app/shared/dto/user-registration/error/user-registration-error-response-dto';
 
 @Injectable()
 export class UserRegistrationAdapterService {
@@ -33,7 +33,7 @@ export class UserRegistrationAdapterService {
     );
   }
 
-  toLoginErrorResponseDto(
+  toUserRegistrationErrorResponseDto(
     httpErrorResponse: HttpErrorResponse
   ): UserRegistrationErrorResponseDto {
     return new UserRegistrationErrorResponseDto(

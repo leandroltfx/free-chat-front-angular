@@ -23,7 +23,7 @@ export class UserRegistrationFacadeService {
       this.userRegistrationAdapterService.toUserRegistrationRequestContract(username, email, password)
     ).pipe(
       map(userRegistrationResponseContract => this.userRegistrationAdapterService.toUserRegistrationResponseDto(userRegistrationResponseContract)),
-      catchError(userRegistrationErrorResponse => throwError(() => this.userRegistrationAdapterService.toLoginErrorResponseDto(userRegistrationErrorResponse))),
+      catchError(userRegistrationErrorResponse => throwError(() => this.userRegistrationAdapterService.toUserRegistrationErrorResponseDto(userRegistrationErrorResponse))),
     );
   }
 }

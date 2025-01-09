@@ -9,13 +9,25 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+import { of, throwError } from 'rxjs';
+
 import { UserRegistrationComponent } from './user-registration.component';
+import { MessageService } from '../../core/services/message/message.service';
+import { UserRegistrationFacadeService } from './acl/facade/user-registration-facade.service';
+import { UserRegistrationResponseDto } from '../../shared/dto/user-registration/user-registration-response-dto';
+import { UserRegistrationErrorResponseDto } from '../../shared/dto/user-registration/error/user-registration-error-response-dto';
 
 describe('UserRegistrationComponent', () => {
-  let component: UserRegistrationComponent;
+  let userRegistrationComponent: UserRegistrationComponent;
   let fixture: ComponentFixture<UserRegistrationComponent>;
+  let userRegistrationFacadeServiceSpy: jasmine.SpyObj<UserRegistrationFacadeService>;
+  let messageServiceSpy: jasmine.SpyObj<MessageService>;
 
   beforeEach(() => {
+
+    userRegistrationFacadeServiceSpy = jasmine.createSpyObj('UserRegistrationFacadeService', ['registerUser']);
+    messageServiceSpy = jasmine.createSpyObj('MessageService', ['showMessage']);
+
     TestBed.configureTestingModule({
       declarations: [UserRegistrationComponent],
       imports: [
@@ -28,232 +40,237 @@ describe('UserRegistrationComponent', () => {
         MatInputModule,
         MatButtonModule,
         MatFormFieldModule,
+      ],
+      providers: [
+        { provide: UserRegistrationFacadeService, useValue: userRegistrationFacadeServiceSpy },
+        { provide: MessageService, useValue: messageServiceSpy },
       ]
     });
     fixture = TestBed.createComponent(UserRegistrationComponent);
-    component = fixture.componentInstance;
+    userRegistrationComponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(userRegistrationComponent).toBeTruthy();
   });
 
   it('_buildUserRegistrationForm - deve montar o formulário para cadastro de usuário', () => {
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    expect(component.userRegistrationForm.controls['username']).toBeDefined();
-    expect(component.userRegistrationForm.controls['email']).toBeDefined();
-    expect(component.userRegistrationForm.controls['password']).toBeDefined();
-    expect(component.userRegistrationForm.controls['confirmPassword']).toBeDefined();
+    expect(userRegistrationComponent.userRegistrationForm.controls['username']).toBeDefined();
+    expect(userRegistrationComponent.userRegistrationForm.controls['email']).toBeDefined();
+    expect(userRegistrationComponent.userRegistrationForm.controls['password']).toBeDefined();
+    expect(userRegistrationComponent.userRegistrationForm.controls['confirmPassword']).toBeDefined();
   });
 
   it('registerUser - deve seguir o fluxo para cadastro de usuário se o formulário estiver válido', () => {
 
-    const logSpy = spyOn(console, 'log');
+    const userRegistrationResponseDto: UserRegistrationResponseDto = new UserRegistrationResponseDto(
+      'Usuário cadastrado com sucesso!',
+      'admin@mail.com',
+      'admin'
+    );
+    userRegistrationFacadeServiceSpy.registerUser.and.returnValue(of(userRegistrationResponseDto));
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.registerUser();
+    userRegistrationComponent.registerUser();
 
-    expect(logSpy).toHaveBeenCalledWith('register user');
+    expect(userRegistrationFacadeServiceSpy.registerUser).toHaveBeenCalledWith('username', 'email@email.com', 'abc123abc');
+  });
+
+  it('deve disparar mensagem de erro se der erro no cadastro de usuário', () => {
+
+    const userRegistrationResponseError: UserRegistrationErrorResponseDto = new UserRegistrationErrorResponseDto(
+      'Ocorreu um erro no cadastro de usuário, tente novamente mais tarde.',
+    );
+    userRegistrationFacadeServiceSpy.registerUser.and.returnValue(throwError(() => userRegistrationResponseError));
+
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
+
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('asd123asd');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('asd123asd');
+
+    userRegistrationComponent.registerUser();
+
+    expect(userRegistrationFacadeServiceSpy.registerUser).toHaveBeenCalledWith('username', 'email@email.com', 'asd123asd');
+    expect(messageServiceSpy.showMessage).toHaveBeenCalledWith('Ocorreu um erro no cadastro de usuário, tente novamente mais tarde.', 'error');
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome de usuário não for preenchido', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome de usuário estiver com espaços', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('admin admin');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('admin admin');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome de usuário estiver com menos de 3 caracteres', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('us');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('us');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome de usuário estiver com mais de 30 caracteres', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('adminadminadminadminadminadminx');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('adminadminadminadminadminadminx');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o email estiver com mais de 254 caracteres', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o email não for preenchido', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o email estiver inválido', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se a senha não for preenchida', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('asd123asd');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('asd123asd');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se a senha estiver com menos de 8 caracteres', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc1234');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc1234');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc1234');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc1234');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se a senha estiver com mais de 64 caracteres', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se a confirmação de senha não for preenchida', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc12345');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc12345');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se a confirmação de senha estiver diferente da senha', () => {
 
-    const logSpy = spyOn(console, 'log');
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
-    component.userRegistrationForm = component['_buildUserRegistrationForm']();
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc12345');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc12347');
 
-    component.userRegistrationForm.controls['username'].setValue('username');
-    component.userRegistrationForm.controls['email'].setValue('email@email.com');
-    component.userRegistrationForm.controls['password'].setValue('abc12345');
-    component.userRegistrationForm.controls['confirmPassword'].setValue('abc12347');
+    userRegistrationComponent.registerUser();
 
-    component.registerUser();
-
-    expect(logSpy).not.toHaveBeenCalled();
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 });
