@@ -22,8 +22,8 @@ export class UserRegistrationProxyService {
       `${this.basePathBackMockoon}/user`,
       userRegistrationRequestContract
     ).pipe(
-      map(userRegistrationResponseContract => userRegistrationResponseContract),
-      catchError(userRegistrationErrorResponse => throwError(() => userRegistrationErrorResponse)),
+      map((userRegistrationResponseContract: UserRegistrationResponseContract) => userRegistrationResponseContract),
+      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => httpErrorResponse)),
     );
   }
 }

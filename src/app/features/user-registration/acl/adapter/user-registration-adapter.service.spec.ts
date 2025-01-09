@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { UserRegistrationAdapterService } from './user-registration-adapter.service';
-import { UserRegistrationRequestContract } from 'src/app/shared/contracts/user-registration/request/user-registration-request-contract';
-import { UserRegistrationResponseContract } from 'src/app/shared/contracts/user-registration/response/user-registration-response-contract';
-import { UserRegistrationResponseDto } from 'src/app/shared/dto/user-registration/user-registration-response-dto';
-import { HttpErrorResponse } from '@angular/common/http';
-import { UserRegistrationErrorResponseDto } from 'src/app/shared/dto/user-registration/error/user-registration-error-response-dto';
+import { UserRegistrationRequestContract } from '../../../../shared/contracts/user-registration/request/user-registration-request-contract';
+import { UserRegistrationResponseContract } from '../../../../shared/contracts/user-registration/response/user-registration-response-contract';
+import { UserRegistrationResponseDto } from '../../../../shared/dto/user-registration/user-registration-response-dto';
+import { UserRegistrationErrorResponseDto } from '../../../../shared/dto/user-registration/error/user-registration-error-response-dto';
 
 describe('UserRegistrationAdapterService', () => {
   let userRegistrationAdapterService: UserRegistrationAdapterService;

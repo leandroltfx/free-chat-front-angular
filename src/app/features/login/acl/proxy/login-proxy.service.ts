@@ -22,8 +22,8 @@ export class LoginProxyService {
       `${this.basePathBackMockoon}/login`,
       loginRequestContract
     ).pipe(
-      map(loginResponseContract => loginResponseContract),
-      catchError(httpErrorResponse => throwError(() => httpErrorResponse)),
+      map((loginResponseContract: LoginResponseContract) => loginResponseContract),
+      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => httpErrorResponse)),
     );
   }
 }

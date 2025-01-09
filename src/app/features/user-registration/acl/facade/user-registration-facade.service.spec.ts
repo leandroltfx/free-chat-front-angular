@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { of, throwError } from 'rxjs';
 
 import { UserRegistrationFacadeService } from './user-registration-facade.service';
 import { UserRegistrationProxyService } from '../proxy/user-registration-proxy.service';
 import { UserRegistrationAdapterService } from '../adapter/user-registration-adapter.service';
-import { of, throwError } from 'rxjs';
-import { UserRegistrationResponseContract } from 'src/app/shared/contracts/user-registration/response/user-registration-response-contract';
-import { HttpErrorResponse } from '@angular/common/http';
+import { UserRegistrationResponseContract } from '../../../../shared/contracts/user-registration/response/user-registration-response-contract';
 
 describe('UserRegistrationFacadeService', () => {
   let userRegistrationFacadeService: UserRegistrationFacadeService;
