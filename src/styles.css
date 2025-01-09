@@ -17,6 +17,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .hc-txt-left { text-align: left; }
 .hc-txt-right { text-align: right; }
 
+.hc-flex { display: flex; }
+.hc-align-items { align-items: center; }
+
 .hc-ptop-1 { padding-top: 8px; }
 .hc-ptop-2 { padding-top: 16px; }
 .hc-ptop-3 { padding-top: 24px; }
@@ -28,6 +31,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .hc-mright-3 { margin-right: 24px; }
 .hc-mright-4 { margin-right: 32px; }
 .hc-mright-5 { margin-right: 40px; }
+
+.hc-mleft-1 { margin-left: 8px; }
+.hc-mleft-2 { margin-left: 16px; }
+.hc-mleft-3 { margin-left: 24px; }
+.hc-mleft-4 { margin-left: 32px; }
+.hc-mleft-5 { margin-left: 40px; }
 
 .hc-w-5 { width: 5%; }
 .hc-w-10 { width: 10%; }
