@@ -38,6 +38,10 @@ describe('LoginProxyService', () => {
     httpMock.verify();
   });
 
+  it('should be created', () => {
+    expect(loginProxyService).toBeTruthy();
+  });
+
   it('deve retornar uma resposta com sucesso quando a requisição for bem-sucedida', () => {
 
     loginProxyService.login(loginRequest).subscribe((response: LoginResponseContract) => {
