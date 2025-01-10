@@ -9,21 +9,21 @@ import { UserRegistrationResponseContract } from '../../../../shared/contracts/u
 @Injectable()
 export class UserRegistrationProxyService {
 
-  private basePathBackMockoon: string = 'http://localhost:3000';
+  private _basePathBackMockoon: string = 'http://localhost:3000';
 
   constructor(
-    private readonly httpClient: HttpClient
+    private readonly _httpClient: HttpClient
   ) { }
 
   registerUser(
     userRegistrationRequestContract: UserRegistrationRequestContract
   ): Observable<UserRegistrationResponseContract> {
-    return this.httpClient.post<UserRegistrationResponseContract>(
-      `${this.basePathBackMockoon}/user`,
+    return this._httpClient.post<UserRegistrationResponseContract>(
+      `${this._basePathBackMockoon}/user`,
       userRegistrationRequestContract
     ).pipe(
-      map(userRegistrationResponseContract => userRegistrationResponseContract),
-      catchError(userRegistrationErrorResponse => throwError(() => userRegistrationErrorResponse)),
+      map((userRegistrationResponseContract: UserRegistrationResponseContract) => userRegistrationResponseContract),
+      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => httpErrorResponse)),
     );
   }
 }

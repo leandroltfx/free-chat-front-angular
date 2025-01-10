@@ -17,9 +17,9 @@ export class LoginComponent implements OnInit {
   public hidePassword: boolean = true;
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly messageService: MessageService,
-    private readonly loginFacadeService: LoginFacadeService,
+    private readonly _formBuilder: FormBuilder,
+    private readonly _messageService: MessageService,
+    private readonly _loginFacadeService: LoginFacadeService,
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   private _buildLoginForm(): FormGroup {
-    return this.formBuilder.group({
+    return this._formBuilder.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
@@ -37,13 +37,13 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const email = this.loginForm.controls['email'].value;
       const password = this.loginForm.controls['password'].value;
-      this.loginFacadeService.login(
+      this._loginFacadeService.login(
         email,
         password,
       ).subscribe(
         {
-          next: (loginResponseDto: LoginResponseDto) => this.messageService.showMessage(loginResponseDto.message, 'success'),
-          error: (loginErrorResponseDto: LoginErrorResponseDto) => this.messageService.showMessage(loginErrorResponseDto.message, 'error'),
+          next: (loginResponseDto: LoginResponseDto) => this._messageService.showMessage(loginResponseDto.message, 'success'),
+          error: (loginErrorResponseDto: LoginErrorResponseDto) => this._messageService.showMessage(loginErrorResponseDto.message, 'error'),
         }
       );
     }

@@ -11,11 +11,11 @@ export class LoginAdapterService {
 
   constructor() { }
 
-  toLoginRequestContract(email: string, password: string): LoginRequestContract {
+  public toLoginRequestContract(email: string, password: string): LoginRequestContract {
     return new LoginRequestContract(email, password);
   }
 
-  toLoginResponseDto(
+  public toLoginResponseDto(
     loginResponseContract: LoginResponseContract,
   ): LoginResponseDto {
     return new LoginResponseDto(
@@ -25,7 +25,7 @@ export class LoginAdapterService {
     );
   }
 
-  toLoginErrorResponseDto(
+  public toLoginErrorResponseDto(
     httpErrorResponse: HttpErrorResponse
   ): LoginErrorResponseDto {
     return new LoginErrorResponseDto(

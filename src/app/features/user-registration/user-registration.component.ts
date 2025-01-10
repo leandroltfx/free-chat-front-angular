@@ -26,9 +26,9 @@ export class UserRegistrationComponent {
   public hideConfirmPassword: boolean = true;
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly messageService: MessageService,
-    private readonly userRegistrationFacadeService: UserRegistrationFacadeService,
+    private readonly _formBuilder: FormBuilder,
+    private readonly _messageService: MessageService,
+    private readonly _userRegistrationFacadeService: UserRegistrationFacadeService,
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class UserRegistrationComponent {
   }
 
   private _buildUserRegistrationForm(): FormGroup {
-    return this.formBuilder.group({
+    return this._formBuilder.group({
       username: ['', [Validators.required, Validators.pattern(this._patternUsername), Validators.minLength(this._minLengthUsername), Validators.maxLength(this._maxLengthUsername)]],
       email: ['', [Validators.required, Validators.pattern(this._patternEmail), Validators.maxLength(this._maxLengthEmail)]],
       password: ['', [Validators.required, Validators.minLength(this._minLengthPassword), Validators.maxLength(this._maxLengthPassword)]],
@@ -62,14 +62,14 @@ export class UserRegistrationComponent {
       const username = this.userRegistrationForm.controls['username'].value;
       const email = this.userRegistrationForm.controls['email'].value;
       const password = this.userRegistrationForm.controls['password'].value;
-      this.userRegistrationFacadeService.registerUser(
+      this._userRegistrationFacadeService.registerUser(
         username,
         email,
         password,
       ).subscribe(
         {
-          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => this.messageService.showMessage(userRegistrationResponseDto.message, 'success'),
-          error: (userRegistrationErrorResponseDto: UserRegistrationErrorResponseDto) => this.messageService.showMessage(userRegistrationErrorResponseDto.message, 'error'),
+          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => this._messageService.showMessage(userRegistrationResponseDto.message, 'success'),
+          error: (userRegistrationErrorResponseDto: UserRegistrationErrorResponseDto) => this._messageService.showMessage(userRegistrationErrorResponseDto.message, 'error'),
         }
       );
     }

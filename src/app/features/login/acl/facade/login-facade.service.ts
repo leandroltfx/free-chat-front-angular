@@ -12,19 +12,19 @@ import { LoginResponseContract } from '../../../../shared/contracts/login/respon
 export class LoginFacadeService {
 
   constructor(
-    private readonly loginProxyService: LoginProxyService,
-    private readonly loginAdapterService: LoginAdapterService,
+    private readonly _loginProxyService: LoginProxyService,
+    private readonly _loginAdapterService: LoginAdapterService,
   ) { }
 
-  login(
+  public login(
     email: string,
     password: string,
   ): Observable<LoginResponseDto> {
-    return this.loginProxyService.login(
-      this.loginAdapterService.toLoginRequestContract(email, password)
+    return this._loginProxyService.login(
+      this._loginAdapterService.toLoginRequestContract(email, password)
     ).pipe(
-      map((loginResponseContract: LoginResponseContract) => this.loginAdapterService.toLoginResponseDto(loginResponseContract)),
-      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => this.loginAdapterService.toLoginErrorResponseDto(httpErrorResponse))),
+      map((loginResponseContract: LoginResponseContract) => this._loginAdapterService.toLoginResponseDto(loginResponseContract)),
+      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => this._loginAdapterService.toLoginErrorResponseDto(httpErrorResponse))),
     );
   }
 }
