@@ -8,7 +8,7 @@ import { RecoverPasswordResponseDto } from '../../shared/dto/recover-password/re
 import { RecoverPasswordErrorResponseDto } from '../../shared/dto/recover-password/error/recover-password-error-response-dto';
 
 @Component({
-  selector: 'hc-recover-password',
+  selector: 'fc-recover-password',
   templateUrl: './recover-password.component.html',
   styleUrls: ['./recover-password.component.css']
 })

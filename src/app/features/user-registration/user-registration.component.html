@@ -1,11 +1,11 @@
-<div class="hc-w-30 hc-center hc-ptop-5">
+<div class="fc-w-30 fc-center fc-ptop-5">
     <mat-card>
-        <header class="hc-txt-center hc-ptop-2">
+        <header class="fc-txt-center fc-ptop-2">
             <h1>Cadastro de usuário</h1>
         </header>
-        <mat-card-content class="hc-ptop-2">
+        <mat-card-content class="fc-ptop-2">
             <form [formGroup]="userRegistrationForm" (submit)="registerUser()">
-                <mat-form-field class="hc-w-100 hc-ptop-2">
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Nome de usuário</mat-label>
                     <input matInput formControlName="username" required>
                     <mat-error *ngIf="userRegistrationForm.controls['username'].hasError('required')">
@@ -21,7 +21,7 @@
                         O nome de usuário não deve ultrapassar 30 caracteres
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field class="hc-w-100 hc-ptop-2">
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" required>
                     <mat-error *ngIf="userRegistrationForm.controls['email'].hasError('required')">
@@ -34,7 +34,7 @@
                         O email não deve ultrapassar 254 caracteres
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field class="hc-w-100 hc-ptop-2">
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Senha</mat-label>
                     <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
                         (ngModelChange)="updateConfirmValidator()">
@@ -51,7 +51,7 @@
                         A senha não deve ultrapassar 64 caracteres
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field class="hc-w-100 hc-ptop-2">
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Confirme a senha</mat-label>
                     <input matInput [type]="hideConfirmPassword ? 'password' : 'text'"
                         formControlName="confirmPassword">
@@ -66,8 +66,8 @@
                         Senhas inconsistentes
                     </mat-error>
                 </mat-form-field>
-                <div class="hc-txt-right hc-ptop-2">
-                    <button type="submit" mat-raised-button color="primary" class="hc-mright-1">Cadastrar</button>
+                <div class="fc-txt-right fc-ptop-2">
+                    <button type="submit" mat-raised-button color="primary" class="fc-mright-1">Cadastrar</button>
                     <button type="button" mat-button [routerLink]="['/login']">Cancelar</button>
                 </div>
             </form>

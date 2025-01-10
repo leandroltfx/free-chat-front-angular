@@ -6,8 +6,8 @@ export class MessageService {
 
   private classesByMessageType = new Map(
     [
-      ['success', 'hc-success-message'],
-      ['error', 'hc-error-message'],
+      ['success', 'fc-success-message'],
+      ['error', 'fc-error-message'],
     ]
   );
 
