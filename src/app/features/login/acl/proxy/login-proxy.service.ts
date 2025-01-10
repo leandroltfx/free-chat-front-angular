@@ -9,17 +9,17 @@ import { LoginResponseContract } from '../../../../shared/contracts/login/respon
 @Injectable()
 export class LoginProxyService {
 
-  private basePathBackMockoon: string = 'http://localhost:3000';
+  private _basePathBackMockoon: string = 'http://localhost:3000';
 
   constructor(
-    private readonly httpClient: HttpClient,
+    private readonly _httpClient: HttpClient,
   ) { }
 
-  login(
+  public login(
     loginRequestContract: LoginRequestContract,
   ): Observable<LoginResponseContract> {
-    return this.httpClient.post<LoginResponseContract>(
-      `${this.basePathBackMockoon}/login`,
+    return this._httpClient.post<LoginResponseContract>(
+      `${this._basePathBackMockoon}/login`,
       loginRequestContract
     ).pipe(
       map((loginResponseContract: LoginResponseContract) => loginResponseContract),
