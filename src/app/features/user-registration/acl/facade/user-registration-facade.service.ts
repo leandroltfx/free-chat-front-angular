@@ -12,20 +12,20 @@ import { UserRegistrationResponseContract } from '../../../../shared/contracts/u
 export class UserRegistrationFacadeService {
 
   constructor(
-    private readonly userRegistrationProxyService: UserRegistrationProxyService,
-    private readonly userRegistrationAdapterService: UserRegistrationAdapterService,
+    private readonly _userRegistrationProxyService: UserRegistrationProxyService,
+    private readonly _userRegistrationAdapterService: UserRegistrationAdapterService,
   ) { }
 
-  registerUser(
+  public registerUser(
     username: string,
     email: string,
     password: string,
   ): Observable<UserRegistrationResponseDto> {
-    return this.userRegistrationProxyService.registerUser(
-      this.userRegistrationAdapterService.toUserRegistrationRequestContract(username, email, password)
+    return this._userRegistrationProxyService.registerUser(
+      this._userRegistrationAdapterService.toUserRegistrationRequestContract(username, email, password)
     ).pipe(
-      map((userRegistrationResponseContract: UserRegistrationResponseContract) => this.userRegistrationAdapterService.toUserRegistrationResponseDto(userRegistrationResponseContract)),
-      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => this.userRegistrationAdapterService.toUserRegistrationErrorResponseDto(httpErrorResponse))),
+      map((userRegistrationResponseContract: UserRegistrationResponseContract) => this._userRegistrationAdapterService.toUserRegistrationResponseDto(userRegistrationResponseContract)),
+      catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => this._userRegistrationAdapterService.toUserRegistrationErrorResponseDto(httpErrorResponse))),
     );
   }
 }

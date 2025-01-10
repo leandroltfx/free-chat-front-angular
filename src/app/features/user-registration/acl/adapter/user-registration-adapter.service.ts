@@ -11,7 +11,7 @@ export class UserRegistrationAdapterService {
 
   constructor() { }
 
-  toUserRegistrationRequestContract(
+  public toUserRegistrationRequestContract(
     username: string,
     email: string,
     password: string,
@@ -23,7 +23,7 @@ export class UserRegistrationAdapterService {
     );
   }
 
-  toUserRegistrationResponseDto(
+  public toUserRegistrationResponseDto(
     userRegistrationResponseContract: UserRegistrationResponseContract
   ): UserRegistrationResponseDto {
     return new UserRegistrationResponseDto(
@@ -33,7 +33,7 @@ export class UserRegistrationAdapterService {
     );
   }
 
-  toUserRegistrationErrorResponseDto(
+  public toUserRegistrationErrorResponseDto(
     httpErrorResponse: HttpErrorResponse
   ): UserRegistrationErrorResponseDto {
     return new UserRegistrationErrorResponseDto(
