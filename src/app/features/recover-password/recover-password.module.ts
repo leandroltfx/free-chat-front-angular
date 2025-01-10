@@ -9,6 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { RecoverPasswordComponent } from './recover-password.component';
 import { RecoverPasswordRoutingModule } from './recover-password-routing.module';
+import { RecoverPasswordProxyService } from './acl/proxy/recover-password-proxy.service';
+import { RecoverPasswordAdapterService } from './acl/adapter/recover-password-adapter.service';
+import { RecoverPasswordFacadeService } from './acl/facade/recover-password-facade.service';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,11 @@ import { RecoverPasswordRoutingModule } from './recover-password-routing.module'
     MatFormFieldModule,
 
     RecoverPasswordRoutingModule,
+  ],
+  providers: [
+    RecoverPasswordProxyService,
+    RecoverPasswordFacadeService,
+    RecoverPasswordAdapterService,
   ]
 })
 export class RecoverPasswordModule { }
