@@ -3,17 +3,17 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "habit-control-front-angular": {
+    "free-chat-front-angular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
       "sourceRoot": "src",
-      "prefix": "hc",
+      "prefix": "fc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/habit-control-front-angular",
+            "outputPath": "dist/free-chat-front-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -61,10 +61,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "habit-control-front-angular:build:production"
+              "browserTarget": "free-chat-front-angular:build:production"
             },
             "development": {
-              "browserTarget": "habit-control-front-angular:build:development"
+              "browserTarget": "free-chat-front-angular:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +72,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "habit-control-front-angular:build"
+            "browserTarget": "free-chat-front-angular:build"
           }
         },
         "test": {

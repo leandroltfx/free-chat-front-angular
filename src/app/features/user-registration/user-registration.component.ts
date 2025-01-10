@@ -7,7 +7,7 @@ import { UserRegistrationResponseDto } from '../../shared/dto/user-registration/
 import { UserRegistrationErrorResponseDto } from '../../shared/dto/user-registration/error/user-registration-error-response-dto';
 
 @Component({
-  selector: 'hc-user-registration',
+  selector: 'fc-user-registration',
   templateUrl: './user-registration.component.html',
   styleUrls: ['./user-registration.component.css']
 })

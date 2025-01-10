@@ -7,7 +7,7 @@ import { LoginResponseDto } from '../../shared/dto/login/login-response-dto';
 import { LoginErrorResponseDto } from '../../shared/dto/login/error/login-error-response-dto';
 
 @Component({
-  selector: 'hc-login',
+  selector: 'fc-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

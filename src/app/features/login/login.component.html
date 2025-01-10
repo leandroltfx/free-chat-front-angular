@@ -1,18 +1,18 @@
-<div class="hc-w-30 hc-center hc-ptop-5">
+<div class="fc-w-30 fc-center fc-ptop-5">
     <mat-card>
-        <header class="hc-txt-center hc-ptop-2">
-            <h1>Habit Control</h1>
+        <header class="fc-txt-center fc-ptop-2">
+            <h1>Free Chat</h1>
         </header>
-        <mat-card-content class="hc-ptop-2">
+        <mat-card-content class="fc-ptop-2">
             <form [formGroup]="loginForm" (submit)="login()">
-                <mat-form-field class="hc-w-100 hc-ptop-2">
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" required>
                     <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
                         Informe o email
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field class="hc-w-100 hc-ptop-2">
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Senha</mat-label>
                     <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
                     <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
@@ -23,13 +23,13 @@
                     </mat-error>
                 </mat-form-field>
                 <footer>
-                    <div class="hc-txt-right hc-ptop-1">
+                    <div class="fc-txt-right fc-ptop-1">
                         <button mat-button [routerLink]="['/recover-password']">Esqueceu a senha?</button>
                     </div>
-                    <div class="hc-w-100 hc-ptop-1">
-                        <button type="submit" mat-raised-button color="primary" class="hc-w-100">Login</button>
+                    <div class="fc-w-100 fc-ptop-1">
+                        <button type="submit" mat-raised-button color="primary" class="fc-w-100">Login</button>
                     </div>
-                    <div class="hc-txt-left hc-ptop-1 hc-flex hc-align-items">
+                    <div class="fc-txt-left fc-ptop-1 fc-flex fc-align-items">
                         <div>
                             <span>Não tem uma conta?</span>
                         </div>
