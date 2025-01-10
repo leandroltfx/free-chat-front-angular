@@ -9,17 +9,17 @@ import { RecoverPasswordResponseContract } from '../../../../shared/contracts/re
 @Injectable()
 export class RecoverPasswordProxyService {
 
-  private basePathBackMockoon: string = 'http://localhost:3000';
+  private _basePathBackMockoon: string = 'http://localhost:3000';
 
   constructor(
     private readonly _httpClient: HttpClient
   ) { }
 
-  sendEmail(
+  public sendEmail(
     recoverPasswordRequestContract: RecoverPasswordRequestContract,
   ): Observable<RecoverPasswordResponseContract> {
     return this._httpClient.post<RecoverPasswordResponseContract>(
-      `${this.basePathBackMockoon}/recover-password`,
+      `${this._basePathBackMockoon}/recover-password`,
       recoverPasswordRequestContract
     ).pipe(
       map((recoverPasswordResponseContract: RecoverPasswordResponseContract) => recoverPasswordResponseContract),

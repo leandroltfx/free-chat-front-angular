@@ -11,7 +11,7 @@ export class RecoverPasswordAdapterService {
 
   constructor() { }
 
-  toRecoverPasswordRequestContract(
+  public toRecoverPasswordRequestContract(
     email: string,
   ): RecoverPasswordRequestContract {
     return new RecoverPasswordRequestContract(
@@ -19,7 +19,7 @@ export class RecoverPasswordAdapterService {
     );
   }
 
-  toRecoverPasswordResponseDto(
+  public toRecoverPasswordResponseDto(
     recoverPasswordResponseContract: RecoverPasswordResponseContract
   ): RecoverPasswordResponseDto {
     return new RecoverPasswordResponseDto(
@@ -27,7 +27,7 @@ export class RecoverPasswordAdapterService {
     );
   }
 
-  toRecoverPasswordErrorResponseDto(
+  public toRecoverPasswordErrorResponseDto(
     httpErrorResponse: HttpErrorResponse
   ): RecoverPasswordErrorResponseDto {
     return new RecoverPasswordErrorResponseDto(
