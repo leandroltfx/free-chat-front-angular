@@ -70,12 +70,14 @@ describe('UserRegistrationComponent', () => {
     const userRegistrationResponseDto: UserRegistrationResponseDto = new UserRegistrationResponseDto(
       'Usuário cadastrado com sucesso!',
       'admin@mail.com',
-      'admin'
+      'admin',
+      'Admin',
     );
     userRegistrationFacadeServiceSpy.registerUser.and.returnValue(of(userRegistrationResponseDto));
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('Admin');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -83,7 +85,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.registerUser();
 
-    expect(userRegistrationFacadeServiceSpy.registerUser).toHaveBeenCalledWith('username', 'email@email.com', 'abc123abc');
+    expect(userRegistrationFacadeServiceSpy.registerUser).toHaveBeenCalledWith('Admin', 'username', 'email@email.com', 'abc123abc');
   });
 
   it('deve disparar mensagem de erro se der erro no cadastro de usuário', () => {
@@ -95,6 +97,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('asd123asd');
@@ -102,14 +105,60 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.registerUser();
 
-    expect(userRegistrationFacadeServiceSpy.registerUser).toHaveBeenCalledWith('username', 'email@email.com', 'asd123asd');
+    expect(userRegistrationFacadeServiceSpy.registerUser).toHaveBeenCalledWith('User', 'username', 'email@email.com', 'asd123asd');
     expect(messageServiceSpy.showMessage).toHaveBeenCalledWith('Ocorreu um erro no cadastro de usuário, tente novamente mais tarde.', 'error');
+  });
+
+  it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome não for preenchido', () => {
+
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
+
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('');
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+
+    userRegistrationComponent.registerUser();
+
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
+  });
+
+  it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome estiver com menos de 1 caracter', () => {
+
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
+
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('a');
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+
+    userRegistrationComponent.registerUser();
+
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
+  });
+
+  it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome ultrapassar 48 caracteres', () => {
+
+    userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
+
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('username username username username username username');
+    userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
+    userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
+    userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
+    userRegistrationComponent.userRegistrationForm.controls['confirmPassword'].setValue('abc123abc');
+
+    userRegistrationComponent.registerUser();
+
+    expect(userRegistrationFacadeServiceSpy.registerUser).not.toHaveBeenCalled();
   });
 
   it('registerUser - não deve seguir o fluxo para cadastro de usuário se o nome de usuário não for preenchido', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -124,6 +173,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('admin admin');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -138,6 +188,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('us');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -152,6 +203,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('adminadminadminadminadminadminx');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -166,6 +218,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -180,6 +233,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -194,6 +248,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc');
@@ -208,6 +263,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('');
@@ -222,6 +278,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc1234');
@@ -236,6 +293,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123abc1abc123');
@@ -250,6 +308,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc12345');
@@ -264,6 +323,7 @@ describe('UserRegistrationComponent', () => {
 
     userRegistrationComponent.userRegistrationForm = userRegistrationComponent['_buildUserRegistrationForm']();
 
+    userRegistrationComponent.userRegistrationForm.controls['socialName'].setValue('User');
     userRegistrationComponent.userRegistrationForm.controls['username'].setValue('username');
     userRegistrationComponent.userRegistrationForm.controls['email'].setValue('email@email.com');
     userRegistrationComponent.userRegistrationForm.controls['password'].setValue('abc12345');

@@ -21,6 +21,7 @@ describe('LoginProxyService', () => {
     user: {
       email: 'admin@email.com',
       username: 'username',
+      socialName: 'Admin',
     }
   };
 

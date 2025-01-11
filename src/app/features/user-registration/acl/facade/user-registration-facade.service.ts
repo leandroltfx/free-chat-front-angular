@@ -17,12 +17,13 @@ export class UserRegistrationFacadeService {
   ) { }
 
   public registerUser(
+    socialName: string,
     username: string,
     email: string,
     password: string,
   ): Observable<UserRegistrationResponseDto> {
     return this._userRegistrationProxyService.registerUser(
-      this._userRegistrationAdapterService.toUserRegistrationRequestContract(username, email, password)
+      this._userRegistrationAdapterService.toUserRegistrationRequestContract(socialName, username, email, password)
     ).pipe(
       map((userRegistrationResponseContract: UserRegistrationResponseContract) => this._userRegistrationAdapterService.toUserRegistrationResponseDto(userRegistrationResponseContract)),
       catchError((httpErrorResponse: HttpErrorResponse) => throwError(() => this._userRegistrationAdapterService.toUserRegistrationErrorResponseDto(httpErrorResponse))),

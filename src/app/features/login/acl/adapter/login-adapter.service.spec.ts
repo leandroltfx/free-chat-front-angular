@@ -42,6 +42,7 @@ describe('LoginAdapterService', () => {
       user: {
         email: 'admin@email.com',
         username: 'admin',
+        socialName: 'Admin',
       }
     };
 

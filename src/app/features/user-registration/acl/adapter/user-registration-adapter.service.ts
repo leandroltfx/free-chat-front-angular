@@ -12,11 +12,13 @@ export class UserRegistrationAdapterService {
   constructor() { }
 
   public toUserRegistrationRequestContract(
+    socialName: string,
     username: string,
     email: string,
     password: string,
   ): UserRegistrationRequestContract {
     return new UserRegistrationRequestContract(
+      socialName,
       username,
       email,
       password,
@@ -30,6 +32,7 @@ export class UserRegistrationAdapterService {
       userRegistrationResponseContract.message,
       userRegistrationResponseContract.user.email,
       userRegistrationResponseContract.user.username,
+      userRegistrationResponseContract.user.socialName,
     );
   }
 

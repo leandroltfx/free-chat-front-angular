@@ -22,6 +22,7 @@ export class LoginAdapterService {
       loginResponseContract.message,
       loginResponseContract.user.email,
       loginResponseContract.user.username,
+      loginResponseContract.user.socialName,
     );
   }
 

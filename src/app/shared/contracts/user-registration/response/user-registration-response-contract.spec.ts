@@ -3,7 +3,7 @@ import { LoggedUserModel } from '../../../../shared/models/logged-user/logged-us
 
 describe('UserRegistrationResponseContract', () => {
   it('should create an instance', () => {
-    const user: LoggedUserModel = new LoggedUserModel('admin@email.com', 'admin');
+    const user: LoggedUserModel = new LoggedUserModel('admin@email.com', 'admin', 'Admin');
     expect(new UserRegistrationResponseContract('message', user)).toBeTruthy();
   });
 });

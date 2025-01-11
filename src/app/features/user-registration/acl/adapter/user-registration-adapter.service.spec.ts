@@ -25,15 +25,17 @@ describe('UserRegistrationAdapterService', () => {
 
   it('deve montar a requisição do cadastro de usuário', () => {
 
+    const socialName: string = 'Admin';
     const email: string = 'admin@email.com';
     const password: string = 'admin123';
     const username: string = 'username';
 
-    const userRegistrationRequestContract = userRegistrationAdapterService.toUserRegistrationRequestContract(username, email, password);
+    const userRegistrationRequestContract = userRegistrationAdapterService.toUserRegistrationRequestContract(socialName, username, email, password);
 
     expect(userRegistrationRequestContract instanceof UserRegistrationRequestContract).toBeTrue();
     expect(userRegistrationRequestContract.email).toBe('admin@email.com');
     expect(userRegistrationRequestContract.password).toBe('admin123');
+    expect(userRegistrationRequestContract.socialName).toBe('Admin');
   });
 
   it('deve montar o DTO a partir da resposta de sucesso do cadastro de usuário', () => {
@@ -43,6 +45,7 @@ describe('UserRegistrationAdapterService', () => {
       user: {
         email: 'admin@email.com',
         username: 'admin',
+        socialName: 'Admin',
       }
     };
 
@@ -52,6 +55,7 @@ describe('UserRegistrationAdapterService', () => {
     expect(userRegistrationResponseDto.message).toBe('Usuário cadastrado com sucesso!');
     expect(userRegistrationResponseDto.user.email).toBe('admin@email.com');
     expect(userRegistrationResponseDto.user.username).toBe('admin');
+    expect(userRegistrationResponseDto.user.socialName).toBe('Admin');
   });
 
   it('deve montar o DTO a partir da resposta de erro do cadastro de usuário', () => {

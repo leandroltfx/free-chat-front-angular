@@ -6,6 +6,19 @@
         <mat-card-content class="fc-ptop-2">
             <form [formGroup]="userRegistrationForm" (submit)="registerUser()">
                 <mat-form-field class="fc-w-100 fc-ptop-2">
+                    <mat-label>Nome</mat-label>
+                    <input matInput formControlName="socialName" required>
+                    <mat-error *ngIf="userRegistrationForm.controls['socialName'].hasError('required')">
+                        Informe seu nome
+                    </mat-error>
+                    <mat-error *ngIf="userRegistrationForm.controls['socialName'].hasError('minlength')">
+                        O nome deve conter no mínimo 2 caracteres
+                    </mat-error>
+                    <mat-error *ngIf="userRegistrationForm.controls['socialName'].hasError('maxlength')">
+                        O nome não deve ultrapassar 48 caracteres
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="fc-w-100 fc-ptop-2">
                     <mat-label>Nome de usuário</mat-label>
                     <input matInput formControlName="username" required>
                     <mat-error *ngIf="userRegistrationForm.controls['username'].hasError('required')">

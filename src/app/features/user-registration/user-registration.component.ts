@@ -15,6 +15,8 @@ export class UserRegistrationComponent {
 
   private _patternEmail: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private _patternUsername: RegExp = /^[^\s]+$/;
+  private _minLengthSocialName: number = 2;
+  private _maxLengthSocialName: number = 48;
   private _minLengthUsername: number = 3;
   private _maxLengthUsername: number = 30;
   private _maxLengthEmail: number = 254;
@@ -37,6 +39,7 @@ export class UserRegistrationComponent {
 
   private _buildUserRegistrationForm(): FormGroup {
     return this._formBuilder.group({
+      socialName: ['', [Validators.required, Validators.minLength(this._minLengthSocialName), Validators.maxLength(this._maxLengthSocialName)]],
       username: ['', [Validators.required, Validators.pattern(this._patternUsername), Validators.minLength(this._minLengthUsername), Validators.maxLength(this._maxLengthUsername)]],
       email: ['', [Validators.required, Validators.pattern(this._patternEmail), Validators.maxLength(this._maxLengthEmail)]],
       password: ['', [Validators.required, Validators.minLength(this._minLengthPassword), Validators.maxLength(this._maxLengthPassword)]],
@@ -59,10 +62,12 @@ export class UserRegistrationComponent {
 
   public registerUser(): void {
     if (this.userRegistrationForm.valid) {
+      const socialName = this.userRegistrationForm.controls['socialName'].value;
       const username = this.userRegistrationForm.controls['username'].value;
       const email = this.userRegistrationForm.controls['email'].value;
       const password = this.userRegistrationForm.controls['password'].value;
       this._userRegistrationFacadeService.registerUser(
+        socialName,
         username,
         email,
         password,

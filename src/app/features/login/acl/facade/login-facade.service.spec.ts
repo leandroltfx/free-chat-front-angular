@@ -38,7 +38,8 @@ describe('LoginFacadeService', () => {
       'Login efetuado com sucesso!',
       {
         email: 'admin@email.com',
-        username: 'admin'
+        username: 'admin',
+        socialName: 'Admin',
       }
     );
     loginProxyServiceSpy.login.and.returnValue(of(loginResponseContract))

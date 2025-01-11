@@ -3,7 +3,7 @@ import { LoggedUserModel } from '../../../../shared/models/logged-user/logged-us
 
 describe('LoginResponseContract', () => {
   it('should create an instance', () => {
-    const user: LoggedUserModel = new LoggedUserModel('admin@email.com', 'admin');
+    const user: LoggedUserModel = new LoggedUserModel('admin@email.com', 'admin', 'Admin');
     expect(new LoginResponseContract('message', user)).toBeTruthy();
   });
 });

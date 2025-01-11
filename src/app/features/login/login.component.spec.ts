@@ -60,7 +60,8 @@ describe('LoginComponent', () => {
     const loginResponseDto: LoginResponseDto = new LoginResponseDto(
       'Login efetuado com sucesso!',
       'admin@mail.com',
-      'admin'
+      'admin',
+      'Admin'
     );
     loginFacadeServiceSpy.login.and.returnValue(of(loginResponseDto));
 
