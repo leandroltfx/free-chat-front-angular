@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -28,6 +29,7 @@ export class UserRegistrationComponent {
   public hideConfirmPassword: boolean = true;
 
   constructor(
+    private readonly _router: Router,
     private readonly _formBuilder: FormBuilder,
     private readonly _messageService: MessageService,
     private readonly _userRegistrationFacadeService: UserRegistrationFacadeService,
@@ -73,7 +75,10 @@ export class UserRegistrationComponent {
         password,
       ).subscribe(
         {
-          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => this._messageService.showMessage(userRegistrationResponseDto.message, 'success'),
+          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => {
+            this._messageService.showMessage(userRegistrationResponseDto.message, 'success');
+            this._router.navigate(['/home']);
+          },
           error: (userRegistrationErrorResponseDto: UserRegistrationErrorResponseDto) => this._messageService.showMessage(userRegistrationErrorResponseDto.message, 'error'),
         }
       );
