@@ -3,19 +3,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatTabsModule } from '@angular/material/tabs';
 
-import { HomeComponent } from './home.component';
-import { ChatListComponent } from './components/chat-list/chat-list.component';
-import { GroupChatListComponent } from './components/chat-list/group-chat-list/group-chat-list.component';
-import { PrivateChatListComponent } from './components/chat-list/private-chat-list/private-chat-list.component';
+import { ChatListComponent } from './chat-list.component';
+import { GroupChatListComponent } from './group-chat-list/group-chat-list.component';
+import { PrivateChatListComponent } from './private-chat-list/private-chat-list.component';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('ChatListComponent', () => {
+  let component: ChatListComponent;
+  let fixture: ComponentFixture<ChatListComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HomeComponent,
         ChatListComponent,
         GroupChatListComponent,
         PrivateChatListComponent,
@@ -26,7 +24,7 @@ describe('HomeComponent', () => {
         MatTabsModule,
       ]
     });
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(ChatListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
