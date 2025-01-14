@@ -22,6 +22,7 @@ export class LoginAdapterService {
       loginResponseContract.message,
       loginResponseContract.user.email,
       loginResponseContract.user.username,
+      loginResponseContract.user.socialName,
     );
   }
 
@@ -29,7 +30,7 @@ export class LoginAdapterService {
     httpErrorResponse: HttpErrorResponse
   ): LoginErrorResponseDto {
     return new LoginErrorResponseDto(
-      httpErrorResponse.error['message'],
+      httpErrorResponse.error['message'] ?? 'Ocorreu um erro, tente novamente mais tarde.',
     )
   }
 }

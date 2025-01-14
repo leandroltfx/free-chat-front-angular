@@ -9,9 +9,10 @@ export class UserRegistrationResponseDto {
         message: string,
         email: string,
         username: string,
+        socialName: string,
     ) {
         this.message = message;
-        this.user = new LoggedUserModel(email, username);
+        this.user = new LoggedUserModel(email, username, socialName);
     }
 
 }

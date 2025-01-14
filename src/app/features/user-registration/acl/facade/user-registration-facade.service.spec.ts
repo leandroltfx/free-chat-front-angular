@@ -38,12 +38,13 @@ describe('UserRegistrationFacadeService', () => {
       'Usuário cadastrado com sucesso!',
       {
         email: 'admin@email.com',
-        username: 'admin'
+        username: 'admin',
+        socialName: 'Admin',
       }
     );
     userRegistrationProxyServiceSpy.registerUser.and.returnValue(of(userRegistrationResponseContract))
 
-    userRegistrationFacadeService.registerUser('username', 'email@email.com', 'admin123').subscribe(
+    userRegistrationFacadeService.registerUser('Admin', 'username', 'email@email.com', 'admin123').subscribe(
       {
         next: () => {
           expect(userRegistrationProxyServiceSpy.registerUser).toHaveBeenCalled();
@@ -63,7 +64,7 @@ describe('UserRegistrationFacadeService', () => {
     };
     userRegistrationProxyServiceSpy.registerUser.and.returnValue(throwError(() => userRegistrationResponseError));
 
-    userRegistrationFacadeService.registerUser('username', 'email@email.com', 'admin123').subscribe(
+    userRegistrationFacadeService.registerUser('Admin', 'username', 'email@email.com', 'admin123').subscribe(
       {
         error: () => {
           expect(userRegistrationProxyServiceSpy.registerUser).toHaveBeenCalled();

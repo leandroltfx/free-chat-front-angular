@@ -42,6 +42,7 @@ describe('LoginAdapterService', () => {
       user: {
         email: 'admin@email.com',
         username: 'admin',
+        socialName: 'Admin',
       }
     };
 
@@ -61,5 +62,15 @@ describe('LoginAdapterService', () => {
 
     expect(loginResponseDto instanceof LoginErrorResponseDto).toBeTrue();
     expect(loginResponseDto.message).toBe('Ocorreu um erro no login, tente novamente mais tarde.');
+  });
+
+  it('deve montar o DTO com mensagem de erro genérica a partir da resposta de erro do login que não devolver uma mensagem', () => {
+
+    const loginResponseError: HttpErrorResponse = new HttpErrorResponse({ error: {} });
+
+    const loginResponseDto = <LoginErrorResponseDto>loginAdapterService.toLoginErrorResponseDto(loginResponseError);
+
+    expect(loginResponseDto instanceof LoginErrorResponseDto).toBeTrue();
+    expect(loginResponseDto.message).toBe('Ocorreu um erro, tente novamente mais tarde.');
   });
 });

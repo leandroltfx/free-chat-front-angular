@@ -14,6 +14,7 @@ describe('UserRegistrationProxyService', () => {
     username: 'username',
     email: 'admin@email.com',
     password: 'admin123',
+    socialName: 'Admin',
   };
 
   const userRegistrationResponseContract: UserRegistrationResponseContract = {
@@ -21,6 +22,7 @@ describe('UserRegistrationProxyService', () => {
     user: {
       email: 'admin@email.com',
       username: 'username',
+      socialName: 'Admin',
     }
   };
 

@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RecoverPasswordAdapterService } from './recover-password-adapter.service';
-import { RecoverPasswordRequestContract } from 'src/app/shared/contracts/recover-password/request/recover-password-request-contract';
-import { RecoverPasswordResponseContract } from 'src/app/shared/contracts/recover-password/response/recover-password-response-contract';
-import { RecoverPasswordResponseDto } from 'src/app/shared/dto/recover-password/recover-password-response-dto';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RecoverPasswordErrorResponseDto } from 'src/app/shared/dto/recover-password/error/recover-password-error-response-dto';
+
+import { RecoverPasswordAdapterService } from './recover-password-adapter.service';
+import { RecoverPasswordResponseDto } from '../../../../shared/dto/recover-password/recover-password-response-dto';
+import { RecoverPasswordErrorResponseDto } from '../../../../shared/dto/recover-password/error/recover-password-error-response-dto';
+import { RecoverPasswordRequestContract } from '../../../../shared/contracts/recover-password/request/recover-password-request-contract';
+import { RecoverPasswordResponseContract } from '../../../../shared/contracts/recover-password/response/recover-password-response-contract';
 
 describe('RecoverPasswordAdapterService', () => {
   let recoverPasswordAdapterService: RecoverPasswordAdapterService;
@@ -46,6 +47,16 @@ describe('RecoverPasswordAdapterService', () => {
   it('deve montar o DTO a partir da resposta de erro do envio do email', () => {
 
     const recoverPasswordResponseError: HttpErrorResponse = new HttpErrorResponse({ error: { message: 'Ocorreu um erro, tente novamente mais tarde.' } });
+
+    const recoverPasswordErrorResponseDto =  <RecoverPasswordErrorResponseDto>recoverPasswordAdapterService.toRecoverPasswordErrorResponseDto(recoverPasswordResponseError);
+
+    expect(recoverPasswordErrorResponseDto instanceof RecoverPasswordErrorResponseDto).toBeTrue();
+    expect(recoverPasswordErrorResponseDto.message).toBe('Ocorreu um erro, tente novamente mais tarde.');
+  });
+
+  it('deve montar o DTO com mensagem de erro genérica a partir da resposta de erro do envio do email que não devolver uma mensagem', () => {
+
+    const recoverPasswordResponseError: HttpErrorResponse = new HttpErrorResponse({ error: {} });
 
     const recoverPasswordErrorResponseDto =  <RecoverPasswordErrorResponseDto>recoverPasswordAdapterService.toRecoverPasswordErrorResponseDto(recoverPasswordResponseError);
 

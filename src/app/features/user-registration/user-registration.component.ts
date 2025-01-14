@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -15,6 +16,8 @@ export class UserRegistrationComponent {
 
   private _patternEmail: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private _patternUsername: RegExp = /^[^\s]+$/;
+  private _minLengthSocialName: number = 2;
+  private _maxLengthSocialName: number = 48;
   private _minLengthUsername: number = 3;
   private _maxLengthUsername: number = 30;
   private _maxLengthEmail: number = 254;
@@ -26,6 +29,7 @@ export class UserRegistrationComponent {
   public hideConfirmPassword: boolean = true;
 
   constructor(
+    private readonly _router: Router,
     private readonly _formBuilder: FormBuilder,
     private readonly _messageService: MessageService,
     private readonly _userRegistrationFacadeService: UserRegistrationFacadeService,
@@ -37,6 +41,7 @@ export class UserRegistrationComponent {
 
   private _buildUserRegistrationForm(): FormGroup {
     return this._formBuilder.group({
+      socialName: ['', [Validators.required, Validators.minLength(this._minLengthSocialName), Validators.maxLength(this._maxLengthSocialName)]],
       username: ['', [Validators.required, Validators.pattern(this._patternUsername), Validators.minLength(this._minLengthUsername), Validators.maxLength(this._maxLengthUsername)]],
       email: ['', [Validators.required, Validators.pattern(this._patternEmail), Validators.maxLength(this._maxLengthEmail)]],
       password: ['', [Validators.required, Validators.minLength(this._minLengthPassword), Validators.maxLength(this._maxLengthPassword)]],
@@ -59,16 +64,21 @@ export class UserRegistrationComponent {
 
   public registerUser(): void {
     if (this.userRegistrationForm.valid) {
+      const socialName = this.userRegistrationForm.controls['socialName'].value;
       const username = this.userRegistrationForm.controls['username'].value;
       const email = this.userRegistrationForm.controls['email'].value;
       const password = this.userRegistrationForm.controls['password'].value;
       this._userRegistrationFacadeService.registerUser(
+        socialName,
         username,
         email,
         password,
       ).subscribe(
         {
-          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => this._messageService.showMessage(userRegistrationResponseDto.message, 'success'),
+          next: (userRegistrationResponseDto: UserRegistrationResponseDto) => {
+            this._messageService.showMessage(userRegistrationResponseDto.message, 'success');
+            this._router.navigate(['/home']);
+          },
           error: (userRegistrationErrorResponseDto: UserRegistrationErrorResponseDto) => this._messageService.showMessage(userRegistrationErrorResponseDto.message, 'error'),
         }
       );
