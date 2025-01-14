@@ -53,4 +53,14 @@ describe('RecoverPasswordAdapterService', () => {
     expect(recoverPasswordErrorResponseDto instanceof RecoverPasswordErrorResponseDto).toBeTrue();
     expect(recoverPasswordErrorResponseDto.message).toBe('Ocorreu um erro, tente novamente mais tarde.');
   });
+
+  it('deve montar o DTO com mensagem de erro genérica a partir da resposta de erro do envio do email que não devolver uma mensagem', () => {
+
+    const recoverPasswordResponseError: HttpErrorResponse = new HttpErrorResponse({ error: {} });
+
+    const recoverPasswordErrorResponseDto =  <RecoverPasswordErrorResponseDto>recoverPasswordAdapterService.toRecoverPasswordErrorResponseDto(recoverPasswordResponseError);
+
+    expect(recoverPasswordErrorResponseDto instanceof RecoverPasswordErrorResponseDto).toBeTrue();
+    expect(recoverPasswordErrorResponseDto.message).toBe('Ocorreu um erro, tente novamente mais tarde.');
+  });
 });

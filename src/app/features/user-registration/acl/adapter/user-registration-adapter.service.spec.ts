@@ -67,4 +67,14 @@ describe('UserRegistrationAdapterService', () => {
     expect(userRegistrationResponseDto instanceof UserRegistrationErrorResponseDto).toBeTrue();
     expect(userRegistrationResponseDto.message).toBe('Ocorreu um erro no cadastro de usuário, tente novamente mais tarde.');
   });
+
+  it('deve montar o DTO com mensagem de erro genérica a partir da resposta de erro do cadastro de usuário que não devolver uma mensagem', () => {
+
+    const userRegistrationResponseError: HttpErrorResponse = new HttpErrorResponse({ error: {} });
+
+    const userRegistrationResponseDto = <UserRegistrationErrorResponseDto>userRegistrationAdapterService.toUserRegistrationErrorResponseDto(userRegistrationResponseError);
+
+    expect(userRegistrationResponseDto instanceof UserRegistrationErrorResponseDto).toBeTrue();
+    expect(userRegistrationResponseDto.message).toBe('Ocorreu um erro, tente novamente mais tarde.');
+  });
 });
