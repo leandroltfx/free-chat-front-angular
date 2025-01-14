@@ -13,6 +13,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fc-success-message { color: #ffffff; background-color: #008000; text-align: center; }
 .fc-error-message { color: #ffffff; background-color: #ff0000; text-align: center; }
 
+.fc-border-top { border-top: solid #c3c3c3; }
+.fc-border-right { border-right: solid #c3c3c3; }
+.fc-border-bottom { border-bottom: solid #c3c3c3; }
+.fc-border-left { border-left: solid #c3c3c3; }
+
 .fc-txt-center { text-align: center; }
 .fc-txt-left { text-align: left; }
 .fc-txt-right { text-align: right; }
