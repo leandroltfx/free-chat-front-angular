@@ -23,17 +23,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fc-txt-right { text-align: right; }
 
 .fc-flex { display: flex; }
+.fc-flex-wrap { flex-wrap: wrap; }
 .fc-align-items { align-items: center; }
 
 .fc-height-10 { height: 10vh; }
+.fc-height-15 { height: 15vh; }
 .fc-height-20 { height: 20vh; }
+.fc-height-25 { height: 25vh; }
 .fc-height-30 { height: 30vh; }
+.fc-height-35 { height: 35vh; }
 .fc-height-40 { height: 40vh; }
+.fc-height-45 { height: 45vh; }
 .fc-height-50 { height: 50vh; }
+.fc-height-55 { height: 55vh; }
 .fc-height-60 { height: 60vh; }
+.fc-height-65 { height: 65vh; }
 .fc-height-70 { height: 70vh; }
+.fc-height-75 { height: 75vh; }
 .fc-height-80 { height: 80vh; }
+.fc-height-85 { height: 85vh; }
 .fc-height-90 { height: 90vh; }
+.fc-height-95 { height: 95vh; }
 .fc-full-height { height: 100vh; }
 
 .fc-p-1 { padding: 8px; }

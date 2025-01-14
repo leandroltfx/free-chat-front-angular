@@ -1,0 +1,16 @@
+<section class="fc-flex fc-flex-wrap">
+    <div class="fc-w-100 fc-height-80">
+        <h1>Chat ativo aqui</h1>
+    </div>
+    <div class="fc-w-100">
+        <form class="fc-mleft-1" [formGroup]="messageForm" (submit)="sendMessage()">
+            <mat-form-field appearance="outline" class="fc-w-95">
+                <textarea matInput placeholder="Escreva sua mensagem..." cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" formControlName="message"></textarea>
+                <button matSuffix mat-icon-button type="submit" *ngIf="messageForm.controls['message'].value">
+                    <mat-icon>send</mat-icon>
+                </button>
+            </mat-form-field>
+        </form>
+    </div>
+</section>
